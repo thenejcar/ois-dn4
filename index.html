@@ -28,9 +28,16 @@
 							Izberi pacienta:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<select id="izberiPacienta">
-								<option value="empty">empty</option>
-							</select>
+							<div class="row">
+								<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8 nopadding">
+									<select id="izberiPacienta" >
+										<option value="empty">empty</option>
+									</select>
+								</div>
+								<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 nopadding">
+									<button id="dodajPacienta" type="button">Dodaj</button>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="row">
@@ -57,6 +64,7 @@
 							<input id="datumRojstva" disabled="disabled" type="date" placeholder="Datum rojstva"></input>
 						</div>
 					</div>
+						<br/>
 					<div class="row">
 						<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4">
 							Izberi meritev:
@@ -69,7 +77,7 @@
 									</select>
 								</div>
 								<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 nopadding">
-									<button id="add" type="button">Dodaj</button>
+									<button id="dodajMeritev" type="button">Dodaj</button>
 								</div>
 							</div>
 						</div>
@@ -111,7 +119,7 @@
 							Sistolicni tlak:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="sistolicni" disabled="disabled" type="number" placeholder="Sistolicni tlak"></input>
+							<input id="sist" disabled="disabled" type="number" placeholder="Sistolicni tlak"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -119,7 +127,7 @@
 							Diastolicni tlak:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="diastolicni" disabled="disabled" type="number" placeholder="Diastolicni tlak"></input>
+							<input id="diast" disabled="disabled" type="number" placeholder="Diastolicni tlak"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -130,6 +138,7 @@
 							<input id="utrip" disabled="disabled" type="number" placeholder="Srcni utrip"></input>
 						</div>
 					</div>
+					<br/>
 					<div class="row">
 						<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4" nopadding>
 							<button id="Izbrisi">Izbrisi</button>
@@ -146,12 +155,9 @@
 							<button id="generiraj">Ustvari novega pacienta in 3 meritve</button>
 						</div>
 					</div>
-
-
 				</div>
 				<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
 					<h4>Graf</h4>
-					
 				</div>
 			</div>
 		</div>

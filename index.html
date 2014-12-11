@@ -30,12 +30,12 @@
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
 							<div class="row">
 								<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8 nopadding">
-									<select id="izberiPacienta" >
+									<select id="izberiPacienta" onchange="dropdownPacient(this.value)" >
 										<option value="empty">empty</option>
 									</select>
 								</div>
 								<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 nopadding">
-									<button id="dodajPacienta" type="button">Dodaj</button>
+									<button id="dodajPacienta" type="button" onclick="novPacient()">Dodaj</button>
 								</div>
 							</div>
 						</div>
@@ -72,12 +72,12 @@
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
 							<div class="row">
 								<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8 nopadding">
-									<select id="izberiMeritev" >
+									<select id="izberiMeritev" onchange="dropdownMeritev(this.value)" >
 										<option value="empty">empty</option>
 									</select>
 								</div>
 								<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4 nopadding">
-									<button id="dodajMeritev" type="button">Dodaj</button>
+									<button id="dodajMeritev" type="button" onclick="novaMeritev()">Dodaj</button>
 								</div>
 							</div>
 						</div>
@@ -140,19 +140,16 @@
 					</div>
 					<br/>
 					<div class="row">
-						<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4" nopadding>
-							<button id="Izbrisi">Izbrisi</button>
+						<div class="col-md-6 col-lg-6 col-sm-6 col-xs-6" nopadding>
+							<button id="Izbrisi" onclick="izbrisiMeritev()">Izbrisi ?</button>
 						</div>
-						<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4" nopadding>
-							<button id="uredi">Uredi</button>
-						</div>
-						<div class="col-md-4 col-lg-4 col-sm-4 col-xs-4" nopadding>
-							<button id="shrani">Shrani</button>
+						<div class="col-md-6 col-lg-6 col-sm-6 col-xs-6" nopadding>
+							<button id="shrani" disabled="disabled" onclick="shraniSpremembe()">Shrani spremembe</button>
 						</div>
 					</div>
 					<div class="row">
 						<div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-							<button id="generiraj">Ustvari novega pacienta in 3 meritve</button>
+							<button id="generiraj" onclick="generirajVnos()">Ustvari novega pacienta in 3 meritve</button>
 						</div>
 					</div>
 				</div>

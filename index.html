@@ -7,12 +7,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1"/>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
 		<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<title>OIS DN4 - EhrScape</title>
 		<style>
 			body { padding: 16px; }
 			input { width: 100%; }
 			select { width: 100%; }
 			button { width: 100%; }
+			.graf div 
+			{ 
+				color: white;
+				padding: 4px;
+				margin: 2px;
+				text-align: right;
+			}
 		</style>
 	</head>
 	<body>
@@ -95,7 +103,7 @@
 							Visina:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="starost" disabled="disabled" type="number" placeholder="Visina"></input>
+							<input id="visina" disabled="disabled" type="number" placeholder="Visina"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -155,6 +163,16 @@
 				</div>
 				<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
 					<h4>Graf</h4>
+					<select id="izberiGraf" onchange="narisiGraf(this.value)" >
+										<option value="Visina">Visina</option>
+										<option value="Teza">Teza</option>
+										<option value="Temperatura">Temperatura</option>
+										<option value="Sistolicni tlak">Sistolicni tlak</option>
+										<option value="Diastolicni tlak">Diastolicni tlak</option>
+										<option value="Utrip">Utrip</option>
+									</select>
+					<div class="graf" id="graf"></div>
+					
 				</div>
 			</div>
 		</div>

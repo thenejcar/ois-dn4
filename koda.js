@@ -266,6 +266,17 @@ function prekliciSpremembe()
 	addingMeasurment = false;
 	pocistiPoljaMeritve();
 	pocistiPoljaPacienti();
+	$("#datumMeritve").prop("disabled", true);
+	$("#visina").prop("disabled", true);
+	$("#teza").prop("disabled", true);
+	$("#temperatura").prop("disabled", true);
+	$("#sist").prop("disabled", true);
+	$("#diast").prop("disabled", true);
+	$("#utrip").prop("disabled", true);
+	$("#shrani").prop("disabled", true);
+	$("#ime").prop("disabled", true);
+	$("#priimek").prop("disabled", true);
+	$("#datumRojstva").prop("disabled", true);
 }
 
 function shraniSpremembe()

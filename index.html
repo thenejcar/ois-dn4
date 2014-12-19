@@ -69,7 +69,7 @@
 							Datum rojstva:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="datumRojstva" disabled="disabled" type="date" placeholder="Datum rojstva"></input>
+							<input id="datumRojstva" disabled="disabled" type="text" placeholder="Datum rojstva"></input>
 						</div>
 					</div>
 						<br/>
@@ -95,7 +95,7 @@
 							Datum meritve:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="datumMeritve" disabled="disabled" type="date" placeholder="Datum meritve"></input>
+							<input id="datumMeritve" disabled="disabled" type="text" placeholder="Datum meritve"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -103,7 +103,7 @@
 							Visina:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="visina" disabled="disabled" type="number" placeholder="Visina"></input>
+							<input id="visina" disabled="disabled" type="text" placeholder="Visina"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -111,7 +111,7 @@
 							Teza:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="teza" disabled="disabled" type="number" placeholder="Teza"></input>
+							<input id="teza" disabled="disabled" type="text" placeholder="Teza"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -119,7 +119,7 @@
 							Temperatura:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="temperatura" disabled="disabled" type="number" placeholder="Temperatura"></input>
+							<input id="temperatura" disabled="disabled" type="text" placeholder="Temperatura"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -127,7 +127,7 @@
 							Sistolicni tlak:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="sist" disabled="disabled" type="number" placeholder="Sistolicni tlak"></input>
+							<input id="sist" disabled="disabled" type="text" placeholder="Sistolicni tlak"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -135,7 +135,7 @@
 							Diastolicni tlak:
 						</div>
 						<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
-							<input id="diast" disabled="disabled" type="number" placeholder="Diastolicni tlak"></input>
+							<input id="diast" disabled="disabled" type="text" placeholder="Diastolicni tlak"></input>
 						</div>
 					</div>
 					<div class="row">
@@ -143,13 +143,13 @@
 							Srcni utrip:
 						</div>
 						<div class="col-md-8">
-							<input id="utrip" disabled="disabled" type="number" placeholder="Srcni utrip"></input>
+							<input id="utrip" disabled="disabled" type="text" placeholder="Srcni utrip"></input>
 						</div>
 					</div>
 					<br/>
 					<div class="row">
 						<div class="col-md-6 col-lg-6 col-sm-6 col-xs-6" nopadding>
-							<button id="Izbrisi" onclick="izbrisiMeritev()">Izbrisi ?</button>
+							<button id="preklici" onclick="prekliciSpremembe()">Preklici</button>
 						</div>
 						<div class="col-md-6 col-lg-6 col-sm-6 col-xs-6" nopadding>
 							<button id="shrani" disabled="disabled" onclick="shraniSpremembe()">Shrani spremembe</button>
@@ -164,6 +164,7 @@
 				<div class="col-md-8 col-lg-8 col-sm-8 col-xs-8">
 					<h4>Graf</h4>
 					<select id="izberiGraf" onchange="narisiGraf(this.value)" >
+										<option value="none">Izberi tip</option>
 										<option value="Visina">Visina</option>
 										<option value="Teza">Teza</option>
 										<option value="Temperatura">Temperatura</option>

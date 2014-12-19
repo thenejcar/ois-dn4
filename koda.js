@@ -23,6 +23,17 @@ var selectedUser;
 var currentMeasurments = [];//array z meritvami, ki so na volju v dropdownu
 var selectedMeasurment;
 
+//spremenljivki za dodajanje meritev in pacientov
+var addingUser = false;
+var addingMeasurment = false;
+
+//sprazni ob refreshu
+window.onload = function()
+{
+	pocistiPoljaMeritve();
+	pocistiPoljaPacienti();
+}
+
 function generirajVnos()
 {
 	//generiraj pacienta
@@ -202,40 +213,182 @@ function dodajMeritev(ehrId, date, height, weight, temp, systolic, diastolic, pu
 
 
 
-//funkcije s html gumbov
+//funkcije s html gumbov_____________________________________-
 function novPacient()
 {
+	if(addingUser == true || addingMeasurment == true)
+	{
+		error("adding");
+		return;
+	}
+	//enabla polja za vnos userja
 	console.log("dodaj pacienta");
+	addingUser = true
+	pocistiPoljaMeritve();
+	pocistiPoljaPacienti();
+	$("#ime").prop("disabled", false);
+	$("#priimek").prop("disabled", false);
+	$("#datumRojstva").prop("disabled", false);
+	$("#shrani").prop("disabled", false);
+	
 }
 
 function novaMeritev()
 {
+	if(addingUser == true || addingMeasurment == true)
+	{
+		error("adding");
+		return;
+	}
+
 	console.log("dodaj meritev");
+	if(selectedUser == undefined)
+	{
+		error("selectedUserUndefined");
+		return;
+	}
+	addingMeasurment = true;
+	pocistiPoljaMeritve();
+	$("#datumMeritve").prop("disabled", false);
+	$("#visina").prop("disabled", false);
+	$("#teza").prop("disabled", false);
+	$("#temperatura").prop("disabled", false);
+	$("#sist").prop("disabled", false);
+	$("#diast").prop("disabled", false);
+	$("#utrip").prop("disabled", false);
+	$("#shrani").prop("disabled", false);
 }
 
-function izbrisiMeritev()
+function prekliciSpremembe()
 {
-	console.log("izbrisi meritev");
+	console.log("preklici spremembe");
+	addingUser = false;
+	addingMeasurment = false;
+	pocistiPoljaMeritve();
+	pocistiPoljaPacienti();
 }
 
 function shraniSpremembe()
 {
 	console.log("shrani spremembe")
+	if(addingUser == true)
+	{
+		//dodaj userja
+		var ime = $("#ime").val();
+		var priimek = $("#priimek").val();
+		var rojstvo = $("#datumRojstva").val();
+		
+		var datumArray = rojstvo.split(".");
+		if(datumArray.length == 3)
+		{
+			rojstvo = new Date (datumArray[2], (+datumArray[1]-1), datumArray[0]);
+		}
+		else
+		{
+			error("dateformat");
+			return;
+		}
+		if(ime == undefined || priimek == undefined)
+		{
+			error(missingInput);
+			return;
+		}
+		dodajPacienta(ime, priimek, rojstvo, false);
+		//pospravi za sabo
+		addingUser = false;
+		$("#ime").prop("disabled", true);
+		$("#priimek").prop("disabled", true);
+		$("#datumRojstva").prop("disabled", true);
+		if(addingMeasurment == false)
+		{
+			$("#shrani").prop("disabled", true);
+		}
+		
+	}
+	else
+	{
+		if(addingMeasurment == true)
+		{
+			if(selectedUser != undefined)
+			{
+				//dodaj meritev izbranemu userju
+				var datumMeritve = $("#datumMeritve").val();
+				var datumArray = datumMeritve.split(".");
+				if(datumArray.length == 3)
+				{
+					datumMeritve = new Date (datumArray[2], datumArray[1], datumArray[0]);
+				}
+				else
+				{
+					error("dateformat");
+					return;
+				}
+				var visina = $("#visina").val();
+				var teza = $("#teza").val();
+				var temp = $("#temperatura").val();
+				var sist = $("#sist").val();
+				var diast = $("#diast").val();
+				var utrip = $("#utrip").val();
+				
+				if(visina== undefined || teza == undefined || temp == undefined || sist == undefined || diast == undefined || utrip == undefined)
+				{
+					error("missingInput");
+					return;
+				}
+				dodajMeritev(selectedUser.ehrId, datumMeritve, visina, teza, temp, sist, diast, utrip);
+				//pospravi za sabo
+				$("#datumMeritve").prop("disabled", true);
+				$("#visina").prop("disabled", true);
+				$("#teza").prop("disabled", true);
+				$("#temperatura").prop("disabled", true);
+				$("#sist").prop("disabled", true);
+				$("#diast").prop("disabled", true);
+				$("#utrip").prop("disabled", true);
+				addingMeasurment = false;
+				if(addingUser == false)
+				{
+					$("#shrani").prop("disabled", true);
+				}
+			}
+			else
+			{
+				error("selectedUserUndefined");
+			}
+		}
+		else
+		{
+			console.log("nothing to save")
+		}
+	}
 }
 
 function dropdownPacient(selected)
 {
-	if(selected != undefined)
+	if(addingUser==true || addingMeasurment==true)
 	{
-		izberiPacienta(selected);
+		error("adding");
+	}
+	else
+	{
+		if(selected != undefined)
+		{
+			izberiPacienta(selected);
+		}
 	}
 }
 
 function dropdownMeritev(selected)
 {
-	if(selected != undefined)
+	if(addingUser == true || addingMeasurment == true)
 	{
-		izberiMeritev(selected);
+		error("adding");
+	}
+	else
+	{
+		if(selected != undefined)
+		{
+			izberiMeritev(selected);
+		}
 	}
 }
 
@@ -332,7 +485,6 @@ function izberiPacienta(ehrId)
 							var datumString = (datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear());
 							$("#izberiMeritev").append($('<option>',{ value : datum}).text(datumString));
 							currentMeasurments.push(meritev);
-							//TODO ce je to prva dodana meritev, potem jo izberi
 							if(i == 0)
 							{
 								izberiMeritev(datum);
@@ -418,6 +570,12 @@ function pocistiPoljaMeritve()
 	$("#diast").val("");
 	$("#utrip").val("");
 }
+function pocistiPoljaPacienti()
+{
+	$("#ime").val("");
+	$("#priimek").val("");
+	$("#datumRojstva").val("");
+}
 
 function narisiGraf(type)
 {
@@ -438,7 +596,7 @@ function narisiGraf(type)
 				podatek.val = currentMeasurments[i].height;
 				var datum = currentMeasurments[i].dateofmeasurment;
 				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
-				+currentMeasurments[i].height;
+				+"<b>"+currentMeasurments[i].height+"</b>";
 				//ni barve
 				podatki.push(podatek);
 			}
@@ -455,7 +613,7 @@ function narisiGraf(type)
 				podatek.val = currentMeasurments[i].weight;
 				var datum = currentMeasurments[i].dateofmeasurment;
 				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
-				+currentMeasurments[i].weight;
+				+"<b>"+currentMeasurments[i].weight+"</b>";
 				//ni barve
 				podatki.push(podatek);
 			}
@@ -472,7 +630,7 @@ function narisiGraf(type)
 				podatek.val = currentMeasurments[i].temperature;
 				var datum = currentMeasurments[i].dateofmeasurment;
 				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
-				+currentMeasurments[i].temperature;
+				+currentMeasurments[i].temperature+"</b>";
 				if(podatek.val > 37.5)
 				{
 					podatek.color = 1;
@@ -499,7 +657,7 @@ function narisiGraf(type)
 				podatek.val = currentMeasurments[i].sistolic;
 				var datum = currentMeasurments[i].dateofmeasurment;
 				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
-				+currentMeasurments[i].sistolic;
+				+"<b>"+currentMeasurments[i].sistolic+"</b>";
 				if(podatek.val >= 140)
 				{
 					podatek.color = 1;
@@ -526,7 +684,7 @@ function narisiGraf(type)
 				podatek.val = currentMeasurments[i].diastolic;
 				var datum = currentMeasurments[i].dateofmeasurment;
 				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
-				+currentMeasurments[i].diastolic;
+				+"<b>"+currentMeasurments[i].diastolic+"</b>";
 				if(podatek.val >= 90)
 				{
 					podatek.color = 1;
@@ -553,7 +711,7 @@ function narisiGraf(type)
 				podatek.val = currentMeasurments[i].pulse;
 				var datum = currentMeasurments[i].dateofmeasurment;
 				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
-				+currentMeasurments[i].pulse;
+				+"<b>"+currentMeasurments[i].pulse+"</b>";
 				if(podatek.val > 100)
 				{
 					podatek.color = 1;
@@ -604,4 +762,36 @@ function narisiGraf(type)
 		}) 
 		.html(function(d) { return d.text ; });
 	
+}
+
+
+
+
+
+
+
+
+
+
+function error(errcode)
+{
+	switch(errcode)
+	{
+		case "adding":
+			console.log("najprej shrani ali preklici");
+			break;
+		case "dateformat":
+			console.log("napacen format datuma");
+			break;
+		case "selectedUserUndefined":
+			console.log("no user selected");
+			break;
+		case "missingInput":
+			console.log("vnesi vse podatke");
+			break;
+		
+		default:
+			console.log("unknown error");
+			break;
+	}
 }

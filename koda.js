@@ -422,97 +422,150 @@ function pocistiPoljaMeritve()
 function narisiGraf(type)
 {
 	var podatki = [];
-	var warning = false;
+	var warning = [];
 	var maxWidth;
 	switch(type)
 	{
 		case "Visina":
 			maxWidth=300;
-			var average = {val: null, text: null};
+			var average = {val: null, text: null, color: 0};
 			average.val = 123;//average WHO value
 			average.text = "WHO average";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
-				var podatek={val: null, text: null}; 
+				var podatek={val: null, text: null, color: 0}; 
 				podatek.val = currentMeasurments[i].height;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" : "+currentMeasurments[i].height;
+				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				+currentMeasurments[i].height;
+				//ni barve
 				podatki.push(podatek);
 			}
 			break;
 		case "Teza":
 			maxWidth=400;
-			var average={val: null, text: null};
+			var average={val: null, text: null, color: 0};
 			average.val = 123;//average WHO value
 			average.text = "WHO average";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
-				var podatek={val: null, text: null};
+				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].weight;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" : "+currentMeasurments[i].weight;
+				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				+currentMeasurments[i].weight;
+				//ni barve
 				podatki.push(podatek);
 			}
 		break;
 		case "Temperatura":
 			maxWidth=60;
-			var average={val: null, text: null};
+			var average={val: null, text: null, color: 0};
 			average.val = 36;//average WHO value
 			average.text = "WHO average";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
-				var podatek={val: null, text: null};
+				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].temperature;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" : "+currentMeasurments[i].temperature;
+				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				+currentMeasurments[i].temperature;
+				if(podatek.val > 37.5)
+				{
+					podatek.color = 1;
+				}
+				else
+				{
+					if(podatek.val < 36.5)
+					{
+						podatek.color = -1;
+					}
+				}
 				podatki.push(podatek);
 			}
 		break;
 		case "Sistolicni tlak":
 			maxWidth=250;
-			var average={val: null, text: null};
+			var average={val: null, text: null, color: 0};
 			average.val = 123;//average WHO value
 			average.text = "WHO average";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
-				var podatek={val: null, text: null};
+				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].sistolic;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" : "+currentMeasurments[i].sistolic;
+				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				+currentMeasurments[i].sistolic;
+				if(podatek.val >= 140)
+				{
+					podatek.color = 1;
+				}
+				else
+				{
+					if(podatek.val < 90)
+					{
+						podatek.color = -1;
+					}
+				}
 				podatki.push(podatek);
 			}
 		break;
 		case "Diastolicni tlak":
 			maxWidth=250;
-			var average={val: null, text: null};
+			var average={val: null, text: null, color: 0};
 			average.val = 123;//average WHO value
 			average.text = "WHO average";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
-				var podatek={val: null, text: null};
+				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].diastolic;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" : "+currentMeasurments[i].diastolic;
+				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				+currentMeasurments[i].diastolic;
+				if(podatek.val >= 90)
+				{
+					podatek.color = 1;
+				}
+				else
+				{
+					if(podatek.val < 60)
+					{
+						podatek.color = -1;
+					}
+				}
 				podatki.push(podatek);
 			}
 		break;
 		case "Utrip":
 			maxWidth=250;
-			var average={val: null, text: null};
+			var average={val: null, text: null, color: 0};
 			average.val = 123;//average WHO value
 			average.text = "WHO average";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
-				var podatek={val: null, text: null};
+				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].pulse;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" : "+currentMeasurments[i].pulse;
+				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				+currentMeasurments[i].pulse;
+				if(podatek.val > 100)
+				{
+					podatek.color = 1;
+				}
+				else
+				{
+					if(podatek.val < 60)
+					{
+						podatek.color = -1;
+					}
+				}
+
 				podatki.push(podatek);
 			}
 		break;
@@ -524,23 +577,31 @@ function narisiGraf(type)
 	console.log("dp = "+dp);
 	
 	$("#graf").empty();
+	console.log("barve: "+warning.toSource())
 	
 	d3.select(".graf")
 		.selectAll("div")
 		.data(podatki)
 		.enter().append("div")
 		.style("width", function(d) { return ( (+d.val) * (+dp) ) + "px"; })
-		.style("background-color", function(warning) 
+		.style("background-color", function(d) 
 		{
-			if(warning == true)
+			switch(d.color)
 			{
-				return "#CC0000";
-			}
-			else
-			{
-				return "#00CC00";
+				case 1:
+					//previsoko
+					return "#CC0000";
+					break;
+				case -1:
+					//prenizko
+					return "#0000CC";
+					break;
+				default:
+					//normalno
+					return "#00CC00";
+					break;
 			}
 		}) 
-		.text(function(d) { return d.text ; });
+		.html(function(d) { return d.text ; });
 	
 }

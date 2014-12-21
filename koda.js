@@ -23,15 +23,57 @@ var selectedUser;
 var currentMeasurments = [];//array z meritvami, ki so na volju v dropdownu
 var selectedMeasurment;
 
+//default pacienti
+testoslav = 
+{
+	"ehrId": "115cf694-bbcb-4b90-a041-fd9003361716",
+	"firstname": "Testoslav",
+	"lastname": "Testovic",
+	"dateofbirth": new Date(1950, 4, 5)
+};
+
+mjavz =
+{
+	"ehrId": "4b8be02a-4973-4ccf-a67b-82605b9f2880",
+	"firstname": "Mjavz",
+	"lastname": "Muc",
+	"dateofbirth": new Date(2003, 2, 3)
+};
+
+imenko = 
+{
+	"ehrId": "b19d393c-4be4-470a-a54e-4de7b97b864d",
+	"firstname": "Imenko",
+	"lastname": "Priimkovic",
+	"dateofbirth": new Date(1992, 1, 2)
+};
+
+
 //spremenljivki za dodajanje meritev in pacientov
 var addingUser = false;
 var addingMeasurment = false;
 
-//sprazni ob refreshu
+//ob refreshu
 window.onload = function()
 {
 	pocistiPoljaMeritve();
 	pocistiPoljaPacienti();
+	$("#izberiPacienta").empty();
+	usersArray.push(testoslav);
+	$("#izberiPacienta").append($('<option>',{ value : testoslav.ehrId })
+	.text(testoslav.firstname+" "+testoslav.lastname));
+	usersArray.push(mjavz);
+	$("#izberiPacienta").append($('<option>',{ value : mjavz.ehrId })
+	.text(mjavz.firstname+" "+mjavz.lastname));
+	usersArray.push(imenko);
+	$("#izberiPacienta").append($('<option>',{ value : imenko.ehrId })
+	.text(imenko.firstname+" "+imenko.lastname));
+	
+	$("#izberiPacienta").val(testoslav.ehrId);
+	izberiPacienta(testoslav.ehrId);
+
+
+
 }
 
 function generirajVnos()
@@ -262,21 +304,34 @@ function novaMeritev()
 function prekliciSpremembe()
 {
 	console.log("preklici spremembe");
-	addingUser = false;
-	addingMeasurment = false;
-	pocistiPoljaMeritve();
-	pocistiPoljaPacienti();
-	$("#datumMeritve").prop("disabled", true);
-	$("#visina").prop("disabled", true);
-	$("#teza").prop("disabled", true);
-	$("#temperatura").prop("disabled", true);
-	$("#sist").prop("disabled", true);
-	$("#diast").prop("disabled", true);
-	$("#utrip").prop("disabled", true);
+	if(addingMeasurment==false && addingUser==false)
+	{
+		error("notadding");
+		return;
+	}
+	
+	if(addingMeasurment==true)
+	{
+		addingMeasurment = false;
+		$("#datumMeritve").prop("disabled", true);
+		$("#visina").prop("disabled", true);
+		$("#teza").prop("disabled", true);
+		$("#temperatura").prop("disabled", true);
+		$("#sist").prop("disabled", true);
+		$("#diast").prop("disabled", true);
+		$("#utrip").prop("disabled", true);
+		pocistiPoljaMeritve();
+	}
+	else
+	{
+		addingUser = false;
+		pocistiPoljaPacienti();
+		$("#ime").prop("disabled", true);
+		$("#priimek").prop("disabled", true);
+		$("#datumRojstva").prop("disabled", true);
+	}
+	
 	$("#shrani").prop("disabled", true);
-	$("#ime").prop("disabled", true);
-	$("#priimek").prop("disabled", true);
-	$("#datumRojstva").prop("disabled", true);
 }
 
 function shraniSpremembe()
@@ -327,7 +382,7 @@ function shraniSpremembe()
 				var datumArray = datumMeritve.split(".");
 				if(datumArray.length == 3)
 				{
-					datumMeritve = new Date (datumArray[2], datumArray[1], datumArray[0]);
+					datumMeritve = new Date (datumArray[2], (+datumArray[1]-1), datumArray[0]);
 				}
 				else
 				{
@@ -341,7 +396,7 @@ function shraniSpremembe()
 				var diast = $("#diast").val();
 				var utrip = $("#utrip").val();
 				
-				if(visina== undefined || teza == undefined || temp == undefined || sist == undefined || diast == undefined || utrip == undefined)
+				if(visina=="" || teza=="" || temp=="" || sist=="" || diast=="" || utrip=="")
 				{
 					error("missingInput");
 					return;
@@ -408,6 +463,9 @@ function izberiPacienta(ehrId)
 	//napolni select za meritve z ustreznimi datumi
 	//in napolni currMeasurments z ustreznimi meritvami
 	//ce ni nobenih meritev, pusti empty
+	//plus ponastavi graf
+	$("#izberiGraf").val("none");
+	$("#graf").empty();
 	if(selectedUser == undefined || selectedUser.ehrId != ehrId)
 	{
 		console.log("izbral pacienta "+ehrId);
@@ -493,7 +551,7 @@ function izberiPacienta(ehrId)
 						console.log(meritev.toSource());
 						if(datum != undefined)
 						{
-							var datumString = (datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear());
+							var datumString = (datum.getDate()+"."+(datum.getMonth()+1)+"."+datum.getFullYear());
 							$("#izberiMeritev").append($('<option>',{ value : datum}).text(datumString));
 							currentMeasurments.push(meritev);
 							if(i == 0)
@@ -528,6 +586,11 @@ function izberiPacienta(ehrId)
 function izberiMeritev(datum)
 {
 	console.log("izbral meritev "+datum);
+	if(addingMeasurment == true)
+	{
+		error("adding");
+		return;
+	}
 	if(selectedMeasurment == undefined || selectedMeasurment.dateofmeasurment != datum)
 	{
 		for(var i in currentMeasurments)
@@ -555,7 +618,7 @@ function izberiMeritev(datum)
 	var datumString = selectedMeasurment.dateofmeasurment;
 	if(datumString != undefined)
 	{
-		datumString= datumString.getDate()+"."+datumString.getMonth()+"."+datumString.getFullYear();
+		datumString= datumString.getDate()+"."+(datumString.getMonth()+1)+"."+datumString.getFullYear();
 		console.log("tole bom izpisal: "+selectedMeasurment.toSource());
 		$("#datumMeritve").val(datumString);
 		$("#visina").val(selectedMeasurment.height);
@@ -598,22 +661,22 @@ function narisiGraf(type)
 		case "Visina":
 			maxWidth=300;
 			var average = {val: null, text: null, color: 0};
-			average.val = 123;//average WHO value
-			average.text = "WHO average";
+			average.val = 128.2;//average WHO value
+			average.text = "<small>WHO average:</small> "+"128.2";
 			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0}; 
 				podatek.val = currentMeasurments[i].height;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				podatek.text = "<small>"+datum.getDate()+"."+(+datum.getMonth()+1)+"."+datum.getFullYear()+" :</small> "
 				+"<b>"+currentMeasurments[i].height+"</b>";
 				//ni barve
 				podatki.push(podatek);
 			}
 			break;
 		case "Teza":
-			maxWidth=400;
+			maxWidth=300;
 			var average={val: null, text: null, color: 0};
 			average.val = 123;//average WHO value
 			average.text = "WHO average";
@@ -623,7 +686,7 @@ function narisiGraf(type)
 				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].weight;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				podatek.text = "<small>"+datum.getDate()+"."+(+datum.getMonth()+1)+"."+datum.getFullYear()+" :</small> "
 				+"<b>"+currentMeasurments[i].weight+"</b>";
 				//ni barve
 				podatki.push(podatek);
@@ -640,7 +703,7 @@ function narisiGraf(type)
 				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].temperature;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				podatek.text = "<small>"+datum.getDate()+"."+(+datum.getMonth()+1)+"."+datum.getFullYear()+" :</small> "
 				+currentMeasurments[i].temperature+"</b>";
 				if(podatek.val > 37.5)
 				{
@@ -667,7 +730,7 @@ function narisiGraf(type)
 				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].sistolic;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				podatek.text = "<small>"+datum.getDate()+"."+(+datum.getMonth()+1)+"."+datum.getFullYear()+" :</small> "
 				+"<b>"+currentMeasurments[i].sistolic+"</b>";
 				if(podatek.val >= 140)
 				{
@@ -694,7 +757,7 @@ function narisiGraf(type)
 				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].diastolic;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				podatek.text = "<small>"+datum.getDate()+"."+(+datum.getMonth()+1)+"."+datum.getFullYear()+" :</small> "
 				+"<b>"+currentMeasurments[i].diastolic+"</b>";
 				if(podatek.val >= 90)
 				{
@@ -721,7 +784,7 @@ function narisiGraf(type)
 				var podatek={val: null, text: null, color: 0};
 				podatek.val = currentMeasurments[i].pulse;
 				var datum = currentMeasurments[i].dateofmeasurment;
-				podatek.text = "<small>"+datum.getDate()+"."+datum.getMonth()+"."+datum.getFullYear()+" :</small> "
+				podatek.text = "<small>"+datum.getDate()+"."+(+datum.getMonth()+1)+"."+datum.getFullYear()+" :</small> "
 				+"<b>"+currentMeasurments[i].pulse+"</b>";
 				if(podatek.val > 100)
 				{
@@ -790,19 +853,27 @@ function error(errcode)
 	{
 		case "adding":
 			console.log("najprej shrani ali preklici");
+			window.alert("Najprej shrani ali preklici spremembe.");
 			break;
 		case "dateformat":
 			console.log("napacen format datuma");
+			window.alert("Datum mora biti vnesen kot dd.mm.yyyy");
 			break;
 		case "selectedUserUndefined":
 			console.log("no user selected");
+			window.alert("Pacient ni izbran.");
 			break;
 		case "missingInput":
 			console.log("vnesi vse podatke");
+			window.alert("Vnesi vse podatke");
 			break;
+		case "notadding":
+			console.log("not adding");
+			window.alert("Trenutno ne urejas nobenih vnosov.");
 		
 		default:
 			console.log("unknown error");
+			window.alert("Error");
 			break;
 	}
 }

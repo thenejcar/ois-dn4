@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!-- source:  http://www.disabled-world.com/artman/publish/bloodpressurechart.shtml -->
+<recommended_bp>
+	<category age="6">
+		<sys>116</sys>
+		<dia>76</dia>
+	</category>
+	<category age="10">
+		<sys>122</sys>
+		<dia>78</dia>
+	</category>
+	<category age="13">
+		<sys>126</sys>
+		<dia>82</dia>
+	</category>
+	<category age="16">
+		<sys>136</sys>
+		<dia>86</dia>
+	</category>
+	<category age="19">
+		<sys>120</sys>
+		<dia>85</dia>
+	</category>
+	<category age="24">
+		<sys>120</sys>
+		<dia>79</dia>
+	</category>
+	<category age="29">
+		<sys>121</sys>
+		<dia>80</dia>
+	</category>
+	<category age="34">
+		<sys>122</sys>
+		<dia>81</dia>
+	</category>
+	<category age="39">
+		<sys>123</sys>
+		<dia>82</dia>
+	</category>
+	<category age="44">
+		<sys>125</sys>
+		<dia>83</dia>
+	</category>
+	<category age="49">
+		<sys>127</sys>
+		<dia>84</dia>
+	</category>
+	<category age="54">
+		<sys>129</sys>
+		<dia>85</dia>
+	</category>
+	<category age="59">
+		<sys>131</sys>
+		<dia>86</dia>
+	</category>
+	<category age="more">
+		<sys>134</sys>
+		<dia>87</dia>
+	</category>
+</recommended_bp>

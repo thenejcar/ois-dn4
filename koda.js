@@ -29,7 +29,7 @@ testoslav =
 	"ehrId": "115cf694-bbcb-4b90-a041-fd9003361716",
 	"firstname": "Testoslav",
 	"lastname": "Testovic",
-	"dateofbirth": new Date(1950, 4, 5)
+	"dateofbirth": new Date(1995, 4, 5)
 };
 
 mjavz =
@@ -660,10 +660,6 @@ function narisiGraf(type)
 	{
 		case "Visina":
 			maxWidth=300;
-			var average = {val: null, text: null, color: 0};
-			average.val = 128.2;//average WHO value
-			average.text = "<small>WHO average:</small> "+"128.2";
-			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0}; 
@@ -677,10 +673,6 @@ function narisiGraf(type)
 			break;
 		case "Teza":
 			maxWidth=300;
-			var average={val: null, text: null, color: 0};
-			average.val = 123;//average WHO value
-			average.text = "WHO average";
-			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0};
@@ -694,10 +686,6 @@ function narisiGraf(type)
 		break;
 		case "Temperatura":
 			maxWidth=60;
-			var average={val: null, text: null, color: 0};
-			average.val = 36;//average WHO value
-			average.text = "WHO average";
-			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0};
@@ -721,10 +709,12 @@ function narisiGraf(type)
 		break;
 		case "Sistolicni tlak":
 			maxWidth=250;
-			var average={val: null, text: null, color: 0};
-			average.val = 123;//average WHO value
-			average.text = "WHO average";
-			podatki.push(average);
+			var age = ( currentMeasurments[currentMeasurments.length - 1 ].dateofmeasurment.getTime() - selectedUser.dateofbirth.getTime() ) / 31556952000;
+			console.log("starost= "+age);
+			var recommended={val: null, text: null, color: 2};
+			recommended.val = getRecommendedBP(age, "sys");
+			recommended.text = "<small>Recommended:</small> " + recommended.val;
+			podatki.push(recommended);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0};
@@ -748,10 +738,11 @@ function narisiGraf(type)
 		break;
 		case "Diastolicni tlak":
 			maxWidth=250;
-			var average={val: null, text: null, color: 0};
-			average.val = 123;//average WHO value
-			average.text = "WHO average";
-			podatki.push(average);
+			var recommended={val: null, text: null, color: 2};
+			var age = ( currentMeasurments[currentMeasurments.length - 1].dateofmeasurment.getTime() - selectedUser.dateofbirth.getTime() ) / 31556952000;
+			recommended.val = getRecommendedBP(age, "dia");
+			recommended.text = "<small>Recommended:</small> "+ recommended.val;
+			podatki.push(recommended);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0};
@@ -775,10 +766,6 @@ function narisiGraf(type)
 		break;
 		case "Utrip":
 			maxWidth=250;
-			var average={val: null, text: null, color: 0};
-			average.val = 123;//average WHO value
-			average.text = "WHO average";
-			podatki.push(average);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
 				var podatek={val: null, text: null, color: 0};
@@ -820,6 +807,10 @@ function narisiGraf(type)
 		{
 			switch(d.color)
 			{
+				case 2:
+					//priporocen tlak
+					return "#CCCC00";
+					break;
 				case 1:
 					//previsoko
 					return "#CC0000";
@@ -836,6 +827,35 @@ function narisiGraf(type)
 		}) 
 		.html(function(d) { return d.text ; });
 	
+}
+
+function getRecommendedBP( age, type)
+{
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.open("GET", "bp_by_age.xml", false);
+	xmlhttp.send();		var xmlDoc = xmlhttp.responseXML;
+	var xmlDoc = xmlhttp.responseXML;
+	var rec = xmlDoc.getElementsByTagName("category");
+	var i = 0;
+	while(i < rec.length )
+	{
+		if(age < rec[i].getAttribute("age") )
+		{
+			i--;
+			break;
+		}
+		i++;
+	}
+	if(type == "sys")
+	{
+		console.log( rec[i].getElementsByTagName("sys")[0].childNodes[0].nodeValue );
+		return rec[i].getElementsByTagName("sys")[0].childNodes[0].nodeValue;
+	}
+	else
+	{
+		console.log( rec[i].getElementsByTagName("dia")[0].childNodes[0].nodeValue );
+		return rec[i].getElementsByTagName("dia")[0].childNodes[0].nodeValue;
+	}
 }
 
 

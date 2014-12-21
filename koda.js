@@ -709,11 +709,11 @@ function narisiGraf(type)
 		break;
 		case "Sistolicni tlak":
 			maxWidth=250;
-			var age = ( currentMeasurments[currentMeasurments.length - 1 ].dateofmeasurment.getTime() - selectedUser.dateofbirth.getTime() ) / 31556952000;
+			var age = (( currentMeasurments[currentMeasurments.length - 1 ].dateofmeasurment.getTime() - selectedUser.dateofbirth.getTime() ) / 31556952000).toFixed(1);
 			console.log("starost= "+age);
 			var recommended={val: null, text: null, color: 2};
 			recommended.val = getRecommendedBP(age, "sys");
-			recommended.text = "<small>Recommended:</small> " + recommended.val;
+			recommended.text = "<small>Priporoceno za "+age+" let :</small> "+ recommended.val;
 			podatki.push(recommended);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
@@ -739,9 +739,9 @@ function narisiGraf(type)
 		case "Diastolicni tlak":
 			maxWidth=250;
 			var recommended={val: null, text: null, color: 2};
-			var age = ( currentMeasurments[currentMeasurments.length - 1].dateofmeasurment.getTime() - selectedUser.dateofbirth.getTime() ) / 31556952000;
+			var age =  (( currentMeasurments[currentMeasurments.length - 1].dateofmeasurment.getTime() - selectedUser.dateofbirth.getTime() ) / 31556952000).toFixed(1);
 			recommended.val = getRecommendedBP(age, "dia");
-			recommended.text = "<small>Recommended:</small> "+ recommended.val;
+			recommended.text = "<small>Priporoceno za "+age+" let :</small> "+ recommended.val;
 			podatki.push(recommended);
 			for(var i=0; i<currentMeasurments.length; i++)
 			{
@@ -839,7 +839,7 @@ function getRecommendedBP( age, type)
 	var i = 0;
 	while(i < rec.length )
 	{
-		if(age < rec[i].getAttribute("age") )
+		if(+age < rec[i].getAttribute("age") )
 		{
 			i--;
 			break;
